@@ -80,12 +80,12 @@ class App extends Component {
     var { tasks } = this.state;
     var indexStatus = this.findIndex(id);
     if(indexStatus !== -1){
-      tasks[indexStatus].status = !tasks[indexStatus].status;
-    }
+      tasks[indexStatus].status = !tasks[indexStatus].status;    
     this.setState({
       tasks : tasks
-    })
+    });
     localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
   }
 
   findIndex = (id) => {
@@ -97,6 +97,19 @@ class App extends Component {
       }
     });
     return result;
+  }
+
+  onDeleteee = (id) => {
+    var {tasks} = this.state;
+    var indexStatus = this.findIndex(id);
+    if(indexStatus !== -1){
+      tasks.splice(indexStatus, 1);
+      this.setState({
+        tasks : tasks
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+    
   }
 
   render(){
@@ -133,7 +146,11 @@ class App extends Component {
               Generate data
             </button>
             <Control />
-            <TaskList tasks = { tasks } onUpdateStatus = { this.onUpdateStatus }/>
+            <TaskList
+              tasks = { tasks }
+              onUpdateStatus = { this.onUpdateStatus }
+              onDelete = { this. onDeleteee }
+            />
           </div>
         </div>
       </div>
