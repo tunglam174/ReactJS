@@ -109,7 +109,7 @@ class App extends Component {
       });
       localStorage.setItem('tasks', JSON.stringify(tasks));
     }
-    
+    this.onCloseForm();
   }
 
   render(){
