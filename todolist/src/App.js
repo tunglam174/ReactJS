@@ -112,6 +112,10 @@ class App extends Component {
     this.onCloseForm();
   }
 
+  onUpdateee = (id) => {
+    console.log(id);
+  }
+
   render(){
     var { tasks, isDisplayForm } = this.state //var tasks = this.state.tasks
     var elmTaskForm = isDisplayForm
@@ -150,6 +154,7 @@ class App extends Component {
               tasks = { tasks }
               onUpdateStatus = { this.onUpdateStatus }
               onDelete = { this. onDeleteee }
+              onUpdate = { this.onUpdateee }
             />
           </div>
         </div>
