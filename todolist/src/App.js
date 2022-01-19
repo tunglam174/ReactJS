@@ -10,10 +10,11 @@ class App extends Component {
     super(props);
     this.state = {
       tasks : [],
-      isDisplayForm : false
+      isDisplayForm : false,
+      taskEditing: null
     }
   }
-  componentWillMount() {
+  componentDidMount() {
     if(localStorage && localStorage.getItem('tasks')){
       var tasks = JSON.parse(localStorage.getItem('tasks'));
       this.setState({
@@ -56,7 +57,8 @@ class App extends Component {
 
   onToggleForm = () => {
     this.setState({
-      isDisplayForm : !this.state.isDisplayForm
+      isDisplayForm : !this.state.isDisplayForm,
+      taskEditing : null
     });
   }
 
@@ -65,13 +67,24 @@ class App extends Component {
       isDisplayForm : false
     });
   }
+  onShowForm = () => {
+    this.setState({
+      isDisplayForm : true
+    });
+  }
 
   onSubmittt = (data) => {
-    var { tasks } = this.state;
-    data.id = this.generateID();
-    tasks.push(data);
+    var { tasks } = this.state;    
+    if(data.id === ''){
+      data.id = this.generateID();
+      tasks.push(data);
+    } else {
+      var indexEdit = this.findIndex(data.id);
+      tasks[indexEdit] = data;
+    }
     this.setState({
-      tasks : tasks
+      tasks : tasks,
+      taskEditing : null
     });
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }
@@ -113,14 +126,21 @@ class App extends Component {
   }
 
   onUpdateee = (id) => {
-    console.log(id);
+    var {tasks} = this.state;
+    var indexEdit = this.findIndex(id);
+    var taskEditing = tasks[indexEdit];
+    this.setState({
+      taskEditing: taskEditing
+    });
+    this.onShowForm();
   }
 
   render(){
-    var { tasks, isDisplayForm } = this.state //var tasks = this.state.tasks
+    var { tasks, isDisplayForm, taskEditing } = this.state //var tasks = this.state.tasks
     var elmTaskForm = isDisplayForm
       ? <TaskForm onCloseForm={ this.onCloseForm }
       onSubmit={ this.onSubmittt}
+      taskEditinggg = { taskEditing }
     /> : "";
     return (      
       <div className="container">
@@ -153,7 +173,7 @@ class App extends Component {
             <TaskList
               tasks = { tasks }
               onUpdateStatus = { this.onUpdateStatus }
-              onDelete = { this. onDeleteee }
+              onDelete = { this.onDeleteee }
               onUpdate = { this.onUpdateee }
             />
           </div>

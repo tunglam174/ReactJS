@@ -34,11 +34,7 @@ class TaskItem extends Component {
             className="btn btn-warning"
             onClick={ this.onUpdate }
           >
-            <span
-              className="fa fa-pencil mr-5"
-              
-            >              
-            </span>Sửa
+            <span className="fa fa-pencil mr-5"></span>Sửa
           </button>
           &nbsp;
           <button
