@@ -16,6 +16,7 @@ class App extends Component {
         name: '',
         status: -1
       },
+      keyword: ''
     }
   }
   componentDidMount() {
@@ -27,37 +28,37 @@ class App extends Component {
     }
   }
 
-  onGenerateData = () => {
-    var tasks = [
-      { 
-        id : this.generateID(),
-        name : 'hoc hanh',
-        status : true
-      },
-      { 
-        id : this.generateID(),
-        name : 'an uong',
-        status : false
-      },
-      { 
-        id : this.generateID(),
-        name : 'ngu',
-        status : true
-      }
-    ];
-    this.setState({
-      tasks : tasks
-    });
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }
+  // onGenerateData = () => {
+  //   var tasks = [
+  //     { 
+  //       id : this.generateID(),
+  //       name : 'hoc hanh',
+  //       status : true
+  //     },
+  //     { 
+  //       id : this.generateID(),
+  //       name : 'an uong',
+  //       status : false
+  //     },
+  //     { 
+  //       id : this.generateID(),
+  //       name : 'ngu',
+  //       status : true
+  //     }
+  //   ];
+  //   this.setState({
+  //     tasks : tasks
+  //   });
+  //   localStorage.setItem('tasks', JSON.stringify(tasks));
+  // }
 
-  s4(){
-    return Math.floor((1+Math.random()) * 0x10000).toString(16).substring(1);
-  }
+  // s4(){
+  //   return Math.floor((1+Math.random()) * 0x10000).toString(16).substring(1);
+  // }
 
-  generateID(){
-    return this.s4() + '-' + this.s4() + '-' + this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4()
-  }
+  // generateID(){
+  //   return this.s4() + '-' + this.s4() + '-' + this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4()
+  // }
 
   onToggleForm = () => {
     this.setState({
@@ -149,12 +150,18 @@ class App extends Component {
     })
   }
 
+  onSearchhh = (keyword) => {
+    this.setState({
+      keyword : keyword
+    });
+  }
+
   render(){
-    var { tasks, isDisplayForm, taskEditing, filter } = this.state //var tasks = this.state.tasks
+    var { tasks, isDisplayForm, taskEditing, filter, keyword } = this.state //var tasks = this.state.tasks
     if(filter){
       if(filter.name){
         tasks = tasks.filter((task) => {
-          return task.name.indexOf(filter.name) !== -1;
+          return task.name.toLowerCase().indexOf(filter.name) !== -1;
         });
       }
       tasks = tasks.filter((task) => {
@@ -164,6 +171,11 @@ class App extends Component {
           return task.status === (filter.status === 1 ? true : false);
         }
       })
+    }
+    if(keyword){
+      tasks = tasks.filter((task) => {
+        return task.name.toLowerCase().indexOf(keyword) !== -1;
+      });
     }
     var elmTaskForm = isDisplayForm
       ? <TaskForm onCloseForm={ this.onCloseForm }
@@ -189,15 +201,15 @@ class App extends Component {
               <span className="fa fa-plus mr-5"></span>
               Thêm công việc
             </button>
-            <button
+            {/* <button
               className="btn btn-danger ml-5"
               type="button"
               onClick={ this.onGenerateData }
             >
               <span className="fa fa-plus mr-5"></span>
               Generate data
-            </button>
-            <Control />
+            </button> */}
+            <Control onSearch = { this.onSearchhh }/>
             <TaskList
               tasks = { tasks }
               onUpdateStatus = { this.onUpdateStatus }
