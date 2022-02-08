@@ -16,7 +16,9 @@ class App extends Component {
         name: '',
         status: -1
       },
-      keyword: ''
+      keyword: '',
+      sortBy : 'name',
+      sortValue : 1
     }
   }
   componentDidMount() {
@@ -156,8 +158,23 @@ class App extends Component {
     });
   }
 
+  onSorttt = (sortBy, sortValue) => {
+    this.setState({
+      sortBy : sortBy,
+      sortValue : sortValue
+    })
+  }
+
   render(){
-    var { tasks, isDisplayForm, taskEditing, filter, keyword } = this.state //var tasks = this.state.tasks
+    var {
+      tasks,
+      isDisplayForm,
+      taskEditing,
+      filter,
+      keyword,
+      sortBy,
+      sortValue
+    } = this.state //var tasks = this.state.tasks
     if(filter){
       if(filter.name){
         tasks = tasks.filter((task) => {
@@ -176,6 +193,23 @@ class App extends Component {
       tasks = tasks.filter((task) => {
         return task.name.toLowerCase().indexOf(keyword) !== -1;
       });
+    }
+    if(sortBy === 'name') {
+      tasks.sort((a,b) => {
+        if(a.name > b.name)
+        return sortValue; 
+        else if(a.name < b.name)
+        return -sortValue;
+        else return 0;
+      })
+    }else{
+      tasks.sort((a,b) => {
+        if(a.status < b.status)
+        return sortValue; 
+        else if(a.status > b.status)
+        return -sortValue;
+        else return 0;
+      })
     }
     var elmTaskForm = isDisplayForm
       ? <TaskForm onCloseForm={ this.onCloseForm }
@@ -209,7 +243,12 @@ class App extends Component {
               <span className="fa fa-plus mr-5"></span>
               Generate data
             </button> */}
-            <Control onSearch = { this.onSearchhh }/>
+            <Control
+              onSearch = { this.onSearchhh }
+              onSort = { this.onSorttt }
+              sortBy = { sortBy }
+              sortValue = { sortValue }
+            />
             <TaskList
               tasks = { tasks }
               onUpdateStatus = { this.onUpdateStatus }
