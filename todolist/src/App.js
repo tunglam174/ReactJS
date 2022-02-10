@@ -3,7 +3,7 @@ import './App.css';
 import TaskForm from './component/TaskForm';
 import Control from './component/Control';
 import TaskList from './component/TaskList';
-
+import _ from 'lodash';
 class App extends Component {
 
   constructor(props) {
